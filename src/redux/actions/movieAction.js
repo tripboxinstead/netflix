@@ -2,6 +2,35 @@ import api from "../api";
 
 const API_KEY = process.env.REACT_APP_API_KEY
 
+function getMovieDetail(props) {
+
+
+    return async (dispatch) => {
+
+        try {
+        
+           // dispatch({type:"GET_MOVIE_DETAIL_REQUEST"});
+
+            const details = await api.get(`/movie/${props}?api_key=${API_KEY}&language=en-US`);
+
+            //https://api.themoviedb.org/3/movie/{movie_id}?api_key=<<api_key>>&language=en-US
+
+            console.log("디테일", details.data)
+
+            dispatch ( {
+                type: "GET_MOVIE_DETAIL_SUCCESS",
+                payload :{
+                    details: details.data
+                }
+            });
+        }
+        catch (error) {
+            dispatch({type:"GET_MOVIE_DETAIL_FAILURE"});
+        }
+
+    }
+};
+
 function getMovies() {
     return async (dispatch) => {
 
@@ -35,12 +64,7 @@ function getMovies() {
 
             dispatch({type:"GET_MOVIES_FAILURE"});
         }
-
         
-        
-        // console.log(popularMovies);
-       //  console.log("popular",popularMovies);
-        // console.log(upcomingMovies);
     }
 };
 
@@ -48,4 +72,5 @@ function getMovies() {
 
 export const movieAction = {
     getMovies,
+    getMovieDetail,
 }
