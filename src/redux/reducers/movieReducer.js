@@ -16,7 +16,15 @@ function movieReducer (state = initialState,action) {
         case "GET_MOVIE_DETAIL_SUCCESS":
             return {
                 ...state,
-                details : payload,
+                details : payload.details,  
+                genreList : payload.genreList,
+                loading : false,              
+            };
+        
+        case "GET_MOVIE_DETAIL_REQUEST":
+             return {
+                ...state,                
+                loading : true,
             };
 
         case "GET_MOVIES_REQUEST" :

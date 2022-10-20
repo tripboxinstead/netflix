@@ -9,18 +9,18 @@ function getMovieDetail(props) {
 
         try {
         
-           // dispatch({type:"GET_MOVIE_DETAIL_REQUEST"});
+            dispatch({type:"GET_MOVIE_DETAIL_REQUEST"});
 
-            const details = await api.get(`/movie/${props}?api_key=${API_KEY}&language=en-US`);
+            const detailsApi = api.get(`/movie/${props}?api_key=${API_KEY}&language=en-US`);
+            const genreApi = api.get(`/genre/movie/list?api_key=${API_KEY}&language=en-US`);
 
-            //https://api.themoviedb.org/3/movie/{movie_id}?api_key=<<api_key>>&language=en-US
-
-            console.log("디테일", details.data)
+            let [details,genreList] = await Promise.all([detailsApi,genreApi]);
 
             dispatch ( {
                 type: "GET_MOVIE_DETAIL_SUCCESS",
                 payload :{
-                    details: details.data
+                    details: details.data,
+                    genreList: genreList.data.genres
                 }
             });
         }
