@@ -2,8 +2,86 @@ import api from "../api";
 
 const API_KEY = process.env.REACT_APP_API_KEY
 
-function getMovieDetail(props) {
+function getVideos(movie_id) {
 
+    return async (dispatch) => {
+
+        try {
+            dispatch({type:"GET_MOVIE_VIDEOS_REQUEST"});
+            
+            const videos = await api.get(`/movie/${movie_id}/videos?api_key=${API_KEY}&language=en-US`);
+
+            console.log("videos",videos)
+
+            dispatch ( {
+                type: "GET_MOVIE_VIDEOS_SUCCESS",
+                payload :{
+                    videos: videos.data,                    
+                }
+            });
+
+        }
+        catch (error) {
+            dispatch({type:"GET_MOVIE_VIDEOS_FAILURE"});
+        }
+
+
+    }
+}
+
+function getMoivieRelated ( movie_id ) {
+
+    return async (dispatch) => {
+
+        try {
+            dispatch({type:"GET_MOVIE_RELATED_REQUEST"});
+
+            ///movie/{movie_id}/recommendations
+            const recommendations = await api.get(`/movie/${movie_id}/recommendations?api_key=${API_KEY}&language=en-US&page=1`);
+
+            dispatch ( {
+                type: "GET_MOVIE_RELATED_SUCCESS",
+                payload :{
+                    recommendations: recommendations.data,                    
+                }
+            });
+
+        }
+        catch (error) {
+            dispatch({type:"GET_MOVIE_RELATED_FAILURE"});
+        }
+
+    }
+
+}
+
+
+function getMoivieReviews(props) {
+
+    return async (dispatch) => {
+
+        try {
+            dispatch({type:"GET_MOVIE_REVIEWS_REQUEST"});
+
+            const reviews = await api.get(`/movie/${props}/reviews?api_key=${API_KEY}&language=en-US&page=1`);
+
+            dispatch ( {
+                type: "GET_MOVIE_REVIEWS_SUCCESS",
+                payload :{
+                    reviews: reviews.data,                    
+                }
+            });
+
+        }
+        catch (error) {
+            dispatch({type:"GET_MOVIE_REVIEWS_FAILURE"});
+        }
+
+    }
+
+}
+
+function getMovieDetail(props) {
 
     return async (dispatch) => {
 
@@ -13,14 +91,18 @@ function getMovieDetail(props) {
 
             const detailsApi = api.get(`/movie/${props}?api_key=${API_KEY}&language=en-US`);
             const genreApi = api.get(`/genre/movie/list?api_key=${API_KEY}&language=en-US`);
-
-            let [details,genreList] = await Promise.all([detailsApi,genreApi]);
+            const reviewsApi = api.get(`/movie/${props}/reviews?api_key=${API_KEY}&language=en-US&page=1`);
+            const recommendationsApi = api.get(`/movie/${props}/recommendations?api_key=${API_KEY}&language=en-US&page=1`);
+        
+            let [details,genreList,reviews,recommendations] = await Promise.all([detailsApi,genreApi,reviewsApi,recommendationsApi]);
 
             dispatch ( {
                 type: "GET_MOVIE_DETAIL_SUCCESS",
                 payload :{
                     details: details.data,
-                    genreList: genreList.data.genres
+                    genreList: genreList.data.genres,  
+                    reviews: reviews.data,
+                    recommendations: recommendations.data,     
                 }
             });
         }
@@ -73,4 +155,7 @@ function getMovies() {
 export const movieAction = {
     getMovies,
     getMovieDetail,
+    getMoivieReviews,
+    getMoivieRelated,
+    getVideos
 }

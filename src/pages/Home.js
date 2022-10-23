@@ -1,4 +1,4 @@
-import React, { useEffect ,useState } from 'react'
+import React, { useEffect  } from 'react'
 import { movieAction } from "../redux/actions/movieAction";
 import { useDispatch ,useSelector } from "react-redux";
 import Banner from './../component/Banner';
@@ -13,6 +13,8 @@ const Home = () => {
 
     useEffect(() => {
 
+       // if (popularMovies) return;
+
         dispatch(movieAction.getMovies());     
         
     },[]);
@@ -24,8 +26,7 @@ const Home = () => {
   return (
     <div>   
 
-        {/* {popularMovies.results && <Banner movie={popularMovies.results[3]} />} */}
-        <Banner movie={popularMovies.results[3]} />
+        <Banner movie={popularMovies.results[10]} />
 
         <h1>Popular Movie</h1>
         <MovieSlide movies={popularMovies}/>

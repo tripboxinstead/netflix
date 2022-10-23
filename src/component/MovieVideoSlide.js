@@ -1,7 +1,8 @@
 import React from 'react'
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import MovieCard from './MovieCard';
+import MovieVideoCard from './MovieVideoCard';
+import { Button } from 'react-bootstrap';
 
 const responsive = {
     superLargeDesktop: {
@@ -23,15 +24,16 @@ const responsive = {
     }
   };
 
-const MovieSlide = ({movies}) => {
-
-   //console.log(movies);
-
+const MovieVideoSlide = ({videos}) => {
+    console.log("MovieVideoSlide",videos)
   return (
     <div>
+         
         <Carousel responsive={responsive}>
-           { movies.results.map((item,index) => (
-                <MovieCard key={index} item={item} />
+           { videos.results.map((item,index) => ( 
+                
+                <MovieVideoCard key={index} item={item} />
+           
            ))}
             
         </Carousel>
@@ -39,4 +41,4 @@ const MovieSlide = ({movies}) => {
   )
 }
 
-export default MovieSlide
+export default MovieVideoSlide
