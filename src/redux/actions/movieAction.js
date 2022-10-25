@@ -81,6 +81,35 @@ function getMoivieReviews(props) {
 
 }
 
+function getMoviesPopular(page) {
+
+    return async (dispatch) => {
+
+        try {
+
+            dispatch({type:"GET_MOVIE_POPULAR_REQUEST"});
+
+            const popularMovies = await api.get(`movie/popular?api_key=${API_KEY}&language=en-US&page=${page}`);
+
+            console.log("123",popularMovies);
+            console.log("page",page);
+            dispatch ( {
+                type : "GET_MOVIE_POPULAR_SUCCESS",
+                payload : {
+                    popularMovies : popularMovies.data,
+                }
+            })
+
+        }
+        catch (error) {
+
+            dispatch({type:"GET_MOVIE_POPULAR_FAILURE"});
+        }
+
+    }
+
+}
+
 function getMovieDetail(props) {
 
     return async (dispatch) => {
@@ -157,5 +186,6 @@ export const movieAction = {
     getMovieDetail,
     getMoivieReviews,
     getMoivieRelated,
-    getVideos
+    getVideos,
+    getMoviesPopular
 }

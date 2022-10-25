@@ -12,6 +12,24 @@ function movieReducer (state = initialState,action) {
 
     switch (type) {
 
+        case "GET_MOVIE_POPULAR_REQUEST" :
+            return {
+                ...state,
+                loading : true
+            };
+        
+        case "GET_MOVIE_POPULAR_SUCCESS" :
+            return {
+                ...state,
+                popularMovies : payload.popularMovies, 
+                loading : false
+            };
+
+        case "GET_MOVIE_POPULAR_FAILURE" :
+            return {
+                ...state,
+                loading : false,
+            };
        
         case "GET_MOVIES_REQUEST" :
             return {

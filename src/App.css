@@ -120,3 +120,13 @@ body {
   
 } 
 
+.col-movies-filter {
+  margin-top: 100px;
+}
+
+.col-button {
+  width: 200px;
+  height: 50px;
+  border: 1px solid white;
+  margin: 20px;
+}
