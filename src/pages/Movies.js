@@ -3,9 +3,9 @@ import { Col, Container, Row, Button } from 'react-bootstrap';
 import { movieAction } from "../redux/actions/movieAction";
 import { useDispatch ,useSelector } from "react-redux";
 import GridSystem from './../component/GridSystem';
-import Recommendations from './../component/Recommendations';
 import ClipLoader from "react-spinners/ClipLoader";
 import Pagination from "react-js-pagination";
+import MoviesList from './../component/MoviesList';
 
 
 const Movies = () => {
@@ -36,36 +36,36 @@ const Movies = () => {
 
 
   return (
-    <Container>
-        <Row >
-           
-            <Col md="2"></Col>
-            <Col md={"2"} className="col-movies-filter">
-                <Row>
-                    <Button variant="dark" className="col-button" >Sort</Button>
-                </Row>
-                <Row>
-                    <Button variant="dark" className="col-button" >Sort</Button>
-                </Row>
-            </Col>        
-            <Col md="1"></Col>
-            <Col className="col-movies-list" md="6">
-                <GridSystem colCount={2} md = {6} >
-                        {popularMovies.results.length > 0 ? popularMovies.results.map( (item,index) => <Recommendations key={index} item={item} /> ) : [<p>no image</p>] }
-                    
-                </GridSystem>
+    <Container fluid>
 
-                <Pagination
-                itemClass="page-item"
-                linkClass="page-link"
-                    activePage={activePage}
-                    itemsCountPerPage={popularMovies.total_pages}
-                    totalItemsCount={popularMovies.total_results}
-                    pageRangeDisplayed={20}
-                    onChange={handlePageChange}
-                    />
-            </Col>        
-        </Row>
+        <div class="container"> 
+            <div class="row"> 
+                <div class="col">
+                    <Button variant="dark" className="col-button" >Sort</Button>
+                    <Button variant="dark" className="col-button" >Filter</Button>
+                </div>
+                <div class="col">
+                    <Row>
+                    <GridSystem colCount={2}  >
+                            {popularMovies.results.length > 0 ? popularMovies.results.map( (item,index) => <MoviesList key={index} item={item} /> ) : [<p>no image</p>] }
+                    </GridSystem>
+
+                    <Pagination
+                    itemClass="page-item"
+                    linkClass="page-link"
+                        activePage={activePage}
+                        itemsCountPerPage={popularMovies.total_pages}
+                        totalItemsCount={popularMovies.total_results}
+                        pageRangeDisplayed={20}
+                        onChange={handlePageChange}
+                        />
+                    </Row>
+                </div>
+                
+            </div> 
+        </div>
+
+        
     </Container>
   )
 }

@@ -14,7 +14,9 @@ const Recommendations = ({ item}) => {
 
   return (
     <Container className="recommend-container"> 
+    
        <img src= {imgUrl} width={400} alt={item.original_title} />
+       
        
     </Container>
   )

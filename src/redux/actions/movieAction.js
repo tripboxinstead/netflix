@@ -2,6 +2,8 @@ import api from "../api";
 
 const API_KEY = process.env.REACT_APP_API_KEY
 
+
+
 function getVideos(movie_id) {
 
     return async (dispatch) => {
@@ -81,6 +83,34 @@ function getMoivieReviews(props) {
 
 }
 
+function searchMovies(page,keyWord) {
+
+    return async (dispatch) => {
+
+        try {
+
+            //dispatch({type:"SEARCH_MOVIES"});
+
+            const popularMovies = await api.get(`search/movie?api_key=${API_KEY}&language=en-US&page=${page}&include_adult=false&query=${keyWord}`);
+
+            console.log("search",popularMovies)
+
+            dispatch ( {
+                type : "SEARCH_MOVIE_POPULAR_SUCCESS",
+                payload : {
+                    popularMovies : popularMovies.data,
+                }
+            })
+
+        }
+        catch (error) {
+            
+        }
+
+    }
+
+}
+
 function getMoviesPopular(page) {
 
     return async (dispatch) => {
@@ -91,8 +121,7 @@ function getMoviesPopular(page) {
 
             const popularMovies = await api.get(`movie/popular?api_key=${API_KEY}&language=en-US&page=${page}`);
 
-            console.log("123",popularMovies);
-            console.log("page",page);
+            
             dispatch ( {
                 type : "GET_MOVIE_POPULAR_SUCCESS",
                 payload : {
@@ -142,6 +171,8 @@ function getMovieDetail(props) {
     }
 };
 
+
+
 function getMovies() {
     return async (dispatch) => {
 
@@ -187,5 +218,6 @@ export const movieAction = {
     getMoivieReviews,
     getMoivieRelated,
     getVideos,
-    getMoviesPopular
+    getMoviesPopular,
+    searchMovies
 }

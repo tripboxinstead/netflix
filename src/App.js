@@ -14,6 +14,7 @@ function App() {
         <Route path="/" element={<Home/>} />
         <Route path="/Movies" element={<Movies/>} />
         <Route path="/Movies/:movie_id" element={<MovieDetail/>} />
+        <Route path="*" element= { <main style={{ padding: "1rem" }}> <p>페이지를 찾을수가 없습니다!</p> </main>} />
       </Routes>
      
     </div>
