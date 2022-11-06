@@ -6,20 +6,59 @@ import GridSystem from './../component/GridSystem';
 import ClipLoader from "react-spinners/ClipLoader";
 import Pagination from "react-js-pagination";
 import MoviesList from './../component/MoviesList';
-
+import Dropdown from 'react-bootstrap/Dropdown';
+import InputRange from 'react-input-range';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Badge from 'react-bootstrap/Badge';
 
 const Movies = () => {
 
     const dispatch = useDispatch();
+    const [Genre, setGenre] = useState(0);
     const [activePage, setActivePage] = useState(1)
-    const {popularMovies,loading} = useSelector(state => state.movie)
+    const [year, setYear] = useState({min: 1900,max:2050})
+    const {loading} = useSelector(state => state.movie)
+    const popularMovies = useSelector(state => state.movie.popularMovies)
+    const genreList = useSelector(state => state.movie.genreList)
+    const [moviesSort, setMoviesSort] = useState('asc')
 
     const handlePageChange = (pageNumber) => {
-        
+       
         setActivePage(pageNumber);
-        //console.log(`active page is ${e}`);
-       // this.setState({activePage: pageNumber});
+
     };
+
+    const handleFilter = async (event) => {
+        event.preventDefault();
+        await dispatch(movieAction.searchMovies(1,"bb"));
+        console.log("ggg",popularMovies);
+    }
+
+    const handleSortDesc = (e) => {
+        //popularMovies = popularMovies.results.sort((a,b) =>  b[popularMovies.results.original_title] - a[popularMovies.results.original_title]);
+        e.preventDefault();
+        if (moviesSort === "desc") {
+            setMoviesSort("asc");
+        } else {
+            setMoviesSort("desc");
+        }
+       
+        //console.log("ttt","desc");
+    }
+
+    const handleYearFilter = (value) => {
+
+        console.log("max",value.max);
+        setYear(value);
+
+    }
+
+    const handleGenresFilter = (event) => {
+
+        console.log("event11",event.target.dataset.id);
+        setGenre(parseInt(event.target.dataset.id));
+
+    }
 
     useEffect (() => {
       
@@ -32,7 +71,7 @@ const Movies = () => {
     }
 
     console.log("123",popularMovies);
-    
+    console.log("333",genreList)
 
 
   return (
@@ -40,21 +79,151 @@ const Movies = () => {
 
         <div class="container"> 
             <div class="row"> 
-                <div class="col">
-                    <Button variant="dark" className="col-button" >Sort</Button>
-                    <Button variant="dark" className="col-button" >Filter</Button>
+                <div class="col"   >
+                    
+                    <br/>
+
+                    <Dropdown>
+                  
+                        <Dropdown.Toggle   variant="dark" id="dropdown-basic" className='dropdown-menu-button'>
+                            SORT
+                        </Dropdown.Toggle>
+                    
+                    
+                        <Dropdown.Menu className='dropdown-menu-sort' variant="dark">
+                            <Dropdown.Divider variant="dark" />
+                            <Dropdown.Header variant="dark" >
+                                Sort Results By
+                            </Dropdown.Header>
+                            <Dropdown.Item onClick={handleSortDesc} variant="dark">
+                                <Dropdown.Header>
+                                    Sort By
+                                </Dropdown.Header>
+                                <Dropdown.Header>
+                                    Popularity({moviesSort === 'asc' ? 'Desc' : 'Asc'})
+                                    </Dropdown.Header>
+                            </Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                    <br/>
+
+                    <Dropdown >
+                        <Dropdown.Toggle variant="dark" id="dropdown-basic" className='dropdown-menu-button'>
+                            YEAR FILTER
+                        </Dropdown.Toggle>
+                      
+                        <Dropdown.Menu variant="dark"  className='dropdown-menu-filter' >
+                            <Dropdown.Divider />
+                            <Dropdown.Header  >
+                                 YEAR Filter
+                            </Dropdown.Header>
+                            <br/>
+                            <Dropdown.Header  >
+                                <InputRange
+                                    maxValue={2050}
+                                    minValue={1900}
+                                    value={year}
+                                    onChange={ handleYearFilter } 
+                                />
+                             </Dropdown.Header>
+                            
+                        </Dropdown.Menu>
+                    </Dropdown>
+
+                    <br/>
+
+                    <Dropdown >
+                        <Dropdown.Toggle variant="dark" id="dropdown-basic" className='dropdown-menu-button'>
+                            GENRES FILTER
+                        </Dropdown.Toggle>
+                      
+                        <Dropdown.Menu variant="dark"  className='dropdown-menu-genres-filter' >
+                        
+                          
+                            <Dropdown.Header  >
+                                 Genres Filter
+                            </Dropdown.Header>
+                            <Dropdown.Divider />
+                            <Button className="genres-button"   variant="danger" data-id={0} onClick={handleGenresFilter}>ALL</Button> 
+                            {genreList &&  <div>{genreList.map((item,index) => (<Button className="genres-button"  key={index} variant="danger" data-id={item.id} onClick={handleGenresFilter}>{item.name}</Button> ))} </div> }
+                           
+                        </Dropdown.Menu>
+                    </Dropdown>
+
+                  
+                   
+                  
+               
                 </div>
                 <div class="col">
                     <Row>
-                    <GridSystem colCount={2}  >
-                            {popularMovies.results.length > 0 ? popularMovies.results.map( (item,index) => <MoviesList key={index} item={item} /> ) : [<p>no image</p>] }
-                    </GridSystem>
+                    
+                    { 
+                       
+                        (moviesSort == 'desc'  && Genre == '')  &&
+                           
+                            <GridSystem colCount={2} >
+                            {
+                                popularMovies.results.length > 0 ? 
+                                popularMovies.results.sort((a,b) =>  {
+                                    return b.popularity - a.popularity ;
+                                }).filter(item => item.release_date.substring(0,4) <= year.max && item.release_date.substring(0,4) >= year.min 
+                                ).map( (item,index) => <MoviesList key={index} item={item} /> ) : [<p>no image</p>] 
+                            }
+                            </GridSystem>
+                    }
+
+                    { 
+                       
+                       (moviesSort == 'desc' && Genre !== 0) &&
+                          
+                           <GridSystem colCount={2} >
+                           {
+                               popularMovies.results.length > 0 ? 
+                               popularMovies.results.sort((a,b) =>  {
+                                   return b.popularity - a.popularity ;
+                                }).filter(item => item.release_date.substring(0,4) <= year.max && item.release_date.substring(0,4) >= year.min   && item.genre_ids.indexOf(Genre) !== -1
+                                ).map( (item,index) => <MoviesList key={index} item={item} /> ) : [<p>no image</p>] 
+                           }
+                           </GridSystem>
+                    }
+
+                    { 
+                        
+                        (moviesSort == 'asc' && Genre == '' )&&
+                            <GridSystem colCount={2} >
+
+                            {
+                                  popularMovies.results.length > 0 ? 
+                                  popularMovies.results.sort((a,b) =>  {
+                                        return a.popularity - b.popularity; 
+                                  }).filter(item => item.release_date.substring(0,4) <= year.max && item.release_date.substring(0,4) >= year.min 
+                                  ).map( (item,index) => <MoviesList key={index} item={item} /> ) : [<p>no image</p>] 
+                            }
+                            </GridSystem>
+                    }
+
+{ 
+                        
+                        (moviesSort == 'asc' && Genre !== 0 )&&
+                            <GridSystem colCount={2} >
+
+                            {
+                                  popularMovies.results.length > 0 ? 
+                                  popularMovies.results.sort((a,b) =>  {
+                                        return a.popularity - b.popularity; 
+                                  }).filter(item => item.release_date.substring(0,4) <= year.max && item.release_date.substring(0,4) >= year.min && item.genre_ids.indexOf(Genre) !== -1
+                                  ).map( (item,index) => <MoviesList key={index} item={item} /> ) : [<p>no image</p>] 
+                            }
+                            </GridSystem>
+                    }
+                   
 
                     <Pagination
-                    itemClass="page-item"
-                    linkClass="page-link"
+                        itemClass="page-item"
+                        linkClass="page-link"
                         activePage={activePage}
-                        itemsCountPerPage={popularMovies.total_pages}
+                        itemsCountPerPage={20}
                         totalItemsCount={popularMovies.total_results}
                         pageRangeDisplayed={20}
                         onChange={handlePageChange}

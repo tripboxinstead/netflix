@@ -161,3 +161,43 @@ body {
 .movies-info {
   display: flex;
 }
+
+.dropdown-menu-sort {
+  width: 400px;
+}
+
+
+.dropdown-menu-filter {
+  width: 400px;
+  height: 150px;
+ 
+}
+
+.dropdown-menu-genres-filter {
+  width: 400px;
+  height: 350px;
+}
+
+.dropdown-menu-button {
+  width: 300px;
+  
+ 
+}
+
+.genres-button {
+  margin: 3px;
+}
+
+
+.page-item.active .page-link {
+  background-color: #e61e4d;
+  border-color: #e61e4d;
+}
+
+.page-link {
+  color: #e61e4d;
+}
+
+.page-link:hover {
+  color: #e61e4d;
+}

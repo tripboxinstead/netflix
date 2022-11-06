@@ -5,6 +5,9 @@ import Movies from './pages/Movies';
 import MovieDetail from './pages/MovieDetail';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navigation from './component/Navigation';
+import 'react-input-range/lib/css/index.css';
+
+
 
 function App() {
   return (

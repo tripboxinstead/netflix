@@ -16,11 +16,13 @@ const Navigation = () => {
     const handleSearch = (event) => {
         event.preventDefault();
         
-        console.log("ggg",keyWord);
-    //     dispatch("SEARCH_MOVIES");
-        dispatch(movieAction.searchMovies(1,keyWord));
+        if (keyWord !== "")
+        {
+            dispatch(movieAction.searchMovies(1,keyWord));
 
-        navigate('/Movies');
+            navigate('/Movies');
+        }
+      
     }
 
 

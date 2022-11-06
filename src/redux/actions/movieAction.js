@@ -3,6 +3,29 @@ import api from "../api";
 const API_KEY = process.env.REACT_APP_API_KEY
 
 
+function getGenres() {
+    return async (dispatch) => {
+
+        try {
+
+            dispatch({type:"GET_MOVIE_GENRES_REQUEST"});
+
+            const genres = await api.get(`/genre/movie/list?api_key=${API_KEY}&language=en-US`);
+
+            dispatch ( {
+                type: "GET_MOVIE_GENRES_SUCCESS",
+                payload :{
+                    genres: genres.data,                    
+                }
+            })
+
+        }
+        catch(error) {
+            dispatch({type:"GET_MOVIE_GENRES_FAILURE"});
+        }
+    }
+}
+
 
 function getVideos(movie_id) {
 
@@ -219,5 +242,6 @@ export const movieAction = {
     getMoivieRelated,
     getVideos,
     getMoviesPopular,
-    searchMovies
+    searchMovies,
+    getGenres,
 }
