@@ -10,10 +10,13 @@ import MovieReview from './../component/MovieReview';
 import Recommendations from '../component/Recommendations.js';
 import GridSystem from './../component/GridSystem';
 import MovieVideoPopup from '../component/MovieVideoPopup';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faStar, faUser } from '@fortawesome/free-solid-svg-icons'
 
 
 const MovieDetail = () => {
 
+    const [movieTitle, setMovieTitle] = useState('');
     const [show, setShow] = useState(false);
     const [tabPosition, setTabPosition] = useState('review');
     const dispatch = useDispatch();    
@@ -39,6 +42,7 @@ const MovieDetail = () => {
 
     const handleVideoModal = (e) => {
         e.preventDefault();   
+        setMovieTitle(e.target.dataset.title)
         setShow(true);  
     }
 
@@ -50,6 +54,8 @@ const MovieDetail = () => {
     useEffect (  () => {
                 
          dispatch(movieAction.getMovieDetail(movie_id));
+
+         console.log("details",details)
         
                
     },[movie_id]);
@@ -65,8 +71,7 @@ const MovieDetail = () => {
             <Col lg={5}>
               
                 <div 
-                    className='poster'       
-                    onClick={handleVideoModal} 
+                    className='poster'                         
                     style={{
                         backgroundImage:
                             "url(" + 
@@ -84,12 +89,12 @@ const MovieDetail = () => {
                 <div>
                     {details.genres.map((item,index) => ( <Badge key={index} className="detail-genres" bg="danger">{item.name}</Badge>))}
                 </div>              
-                <h1>SONIC THE HEDGEHOG 2</h1>
+                <h1>{details.original_title}</h1>
                 <h4>Welcome to the next level.</h4>
 
-                <div>
-                    <div>{details.vote_average}</div>
-                    <div>{details.vote_count}</div>
+                <div className='vote-container'>
+                    <div className='vote-item'><FontAwesomeIcon icon={ faStar} /> <div className='vote-value'>{details.vote_average}</div></div> 
+                    <div className='vote-item'><FontAwesomeIcon icon={ faUser} /> <div className='vote-value'>{details.vote_count}</div></div> 
                 </div>
                     
                 <hr/>
@@ -119,6 +124,8 @@ const MovieDetail = () => {
                 </div>
 
                 <hr/>
+
+                <div className="trailer-container" onClick={handleVideoModal} data-title={details.original_title} >Watch Trailer</div>
                
             </Col>
         </Row>
@@ -126,11 +133,11 @@ const MovieDetail = () => {
         <div className="detail-review-wrap">
 
             <div className="detail-review-button">
-                <div>
+                <div className="detail-review-button">
                     <Button variant={tabPosition === "review" ? "danger" : "secondary"} onClick={getReviews}>REVIEWS ({reviews.total_results})</Button>
                 </div>
 
-                <div>
+                <div className="detail-review-button">
                     <Button variant={tabPosition !== "review" ? "danger" : "secondary"} onClick={handleRelatedMovies} >RELATED MOVIES ({recommendations.total_results})</Button>
                 </div>
             </div>
@@ -151,7 +158,7 @@ const MovieDetail = () => {
             
         }
 
-       <MovieVideoPopup show={show} handleVideoPopupClose={handleVideoPopupClose} movieId={movie_id} />
+       <MovieVideoPopup show={show} handleVideoPopupClose={handleVideoPopupClose} movieId={movie_id} movieTitle={movieTitle} />
        
         
 

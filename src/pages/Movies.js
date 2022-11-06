@@ -19,13 +19,12 @@ const Movies = () => {
     const [year, setYear] = useState({min: 1900,max:2050})
     const {loading} = useSelector(state => state.movie)
     const popularMovies = useSelector(state => state.movie.popularMovies)
-    const genreList = useSelector(state => state.movie.genreList)
+    // const genreList = useSelector(state => state.movie.genreList)
+    const genreList = useSelector(state => state.movieDetail.genreList);
     const [moviesSort, setMoviesSort] = useState('asc')
 
     const handlePageChange = (pageNumber) => {
-       
         setActivePage(pageNumber);
-
     };
 
     const handleFilter = async (event) => {
@@ -42,27 +41,20 @@ const Movies = () => {
         } else {
             setMoviesSort("desc");
         }
-       
-        //console.log("ttt","desc");
     }
 
     const handleYearFilter = (value) => {
-
-        console.log("max",value.max);
         setYear(value);
-
     }
 
     const handleGenresFilter = (event) => {
-
-        console.log("event11",event.target.dataset.id);
         setGenre(parseInt(event.target.dataset.id));
-
     }
 
     useEffect (() => {
       
         dispatch(movieAction.getMoviesPopular(activePage));
+        dispatch(movieAction.getGenreList());
       
     }, [activePage]);
 
@@ -132,29 +124,32 @@ const Movies = () => {
 
                     <br/>
 
-                    <Dropdown >
-                        <Dropdown.Toggle variant="dark" id="dropdown-basic" className='dropdown-menu-button'>
-                            GENRES FILTER
-                        </Dropdown.Toggle>
-                      
-                        <Dropdown.Menu variant="dark"  className='dropdown-menu-genres-filter' >
+                   
+                        <Dropdown >
+                            <Dropdown.Toggle variant="dark" id="dropdown-basic" className='dropdown-menu-button'>
+                                GENRES FILTER
+                            </Dropdown.Toggle>
                         
-                          
-                            <Dropdown.Header  >
-                                 Genres Filter
-                            </Dropdown.Header>
-                            <Dropdown.Divider />
-                            <Button className="genres-button"   variant="danger" data-id={0} onClick={handleGenresFilter}>ALL</Button> 
-                            {genreList &&  <div>{genreList.map((item,index) => (<Button className="genres-button"  key={index} variant="danger" data-id={item.id} onClick={handleGenresFilter}>{item.name}</Button> ))} </div> }
-                           
-                        </Dropdown.Menu>
-                    </Dropdown>
+                            <Dropdown.Menu variant="dark"  className='dropdown-menu-genres-filter' >
+                            
+                            
+                                <Dropdown.Header  >
+                                    Genres Filter
+                                </Dropdown.Header>
+                                <Dropdown.Divider />
+                                <Button className="genres-button"   variant="danger" data-id={0} onClick={handleGenresFilter}>ALL</Button> 
+                                {genreList &&  <div>{genreList.map((item,index) => (<Button className="genres-button"  key={index} variant="danger" data-id={item.id} onClick={handleGenresFilter}>{item.name}</Button> ))} </div> }
+                            
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    
 
                   
                    
                   
                
                 </div>
+               
                 <div class="col">
                     <Row>
                     
@@ -203,7 +198,7 @@ const Movies = () => {
                             </GridSystem>
                     }
 
-{ 
+                    { 
                         
                         (moviesSort == 'asc' && Genre !== 0 )&&
                             <GridSystem colCount={2} >
@@ -218,7 +213,7 @@ const Movies = () => {
                             </GridSystem>
                     }
                    
-
+                    
                     <Pagination
                         itemClass="page-item"
                         linkClass="page-link"
@@ -230,6 +225,7 @@ const Movies = () => {
                         />
                     </Row>
                 </div>
+                
                 
             </div> 
         </div>

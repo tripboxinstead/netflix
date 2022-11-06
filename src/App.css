@@ -117,7 +117,7 @@ body {
 
 .detail-review-button {
   display: flex;  
-  
+  margin-right: 10px;
 }
 
 
@@ -200,4 +200,23 @@ body {
 
 .page-link:hover {
   color: #e61e4d;
+}
+
+.trailer-container {
+  color: #e61e4d;;
+  cursor: pointer ;
+}
+
+.vote-container {
+  display: flex;
+}
+
+.vote-item {
+  display: flex;
+  margin-right: 10px;
+  align-items: center;
+}
+
+.vote-value {
+  margin-left: 10px;
 }

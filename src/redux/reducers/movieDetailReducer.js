@@ -12,6 +12,23 @@ function movieDetailReducer (state = initialState,action) {
 
     switch (type) {
 
+        case "GET_MOVIE_GENRE_SUCCESS":
+            return {
+                ...state,                              
+                genreList : payload.genreList,
+                loading : false,                
+            };
+        case "GET_MOVIE_GENRE_REQUEST":
+            return {
+                ...state,                
+                loading : true,
+            };
+        case "GET_MOVIES_GENRE_FAILURE" :
+            return {
+                ...state,
+                loading : false
+            };
+
         case "GET_MOVIE_DETAIL_SUCCESS":
             return {
                 ...state,              

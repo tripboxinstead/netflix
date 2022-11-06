@@ -9,7 +9,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import MovieVideoSlide from './MovieVideoSlide';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-const MovieVideoPopup = ({show,handleVideoPopupClose,movieId}) => {
+const MovieVideoPopup = ({show,handleVideoPopupClose,movieId,movieTitle}) => {
 
     const dispatch = useDispatch();  
     const {videos,modalloading} = useSelector(state => state.movieVideos );
@@ -22,7 +22,7 @@ const MovieVideoPopup = ({show,handleVideoPopupClose,movieId}) => {
 
         dispatch(movieAction.getVideos(movieId));
 
-       
+        
 
     },[movieId]);
 
@@ -38,7 +38,7 @@ const MovieVideoPopup = ({show,handleVideoPopupClose,movieId}) => {
         <Modal show={show} onHide={handleShow} daria-labelledby="contained-modal-title-vcenter" size="lg"  centered>
             
             <Modal.Header className="modal-wrap"  closeButton>
-                <Modal.Title>Modal heading</Modal.Title>         
+                <Modal.Title>{movieTitle}</Modal.Title>         
                 <FontAwesomeIcon icon="fa-duotone fa-xmark" />   
             </Modal.Header>
             <Modal.Body className="modal-wrap" >

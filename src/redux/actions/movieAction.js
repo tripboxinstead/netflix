@@ -3,29 +3,6 @@ import api from "../api";
 const API_KEY = process.env.REACT_APP_API_KEY
 
 
-function getGenres() {
-    return async (dispatch) => {
-
-        try {
-
-            dispatch({type:"GET_MOVIE_GENRES_REQUEST"});
-
-            const genres = await api.get(`/genre/movie/list?api_key=${API_KEY}&language=en-US`);
-
-            dispatch ( {
-                type: "GET_MOVIE_GENRES_SUCCESS",
-                payload :{
-                    genres: genres.data,                    
-                }
-            })
-
-        }
-        catch(error) {
-            dispatch({type:"GET_MOVIE_GENRES_FAILURE"});
-        }
-    }
-}
-
 
 function getVideos(movie_id) {
 
@@ -156,10 +133,31 @@ function getMoviesPopular(page) {
         catch (error) {
 
             dispatch({type:"GET_MOVIE_POPULAR_FAILURE"});
+            
         }
 
     }
 
+}
+
+function getGenreList() {
+    return async (dispatch) => {
+        try {
+            dispatch({type:"GET_MOVIE_GENRE_REQUEST"});
+
+            const genreList = await api.get(`/genre/movie/list?api_key=${API_KEY}&language=en-US`);
+
+            dispatch ( {
+                type: "GET_MOVIE_GENRE_SUCCESS",
+                payload :{                    
+                    genreList: genreList.data.genres,                      
+                }
+            });
+        }
+        catch (error) {
+            dispatch({type:"GET_MOVIE_GENRE_FAILURE"});
+        }
+    }
 }
 
 function getMovieDetail(props) {
@@ -243,5 +241,5 @@ export const movieAction = {
     getVideos,
     getMoviesPopular,
     searchMovies,
-    getGenres,
+    getGenreList,
 }
